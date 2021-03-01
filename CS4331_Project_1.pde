@@ -22,7 +22,7 @@ int keyCenter = keySize / 2;
 int keySpacing = 10;
 
 DropdownList ddl; // For extras
-String[] options = {"Normal","Defrost", "Popcorn", "Adjust Power"};
+String[] options = {"Normal","Defrost", "Popcorn"};
 
 Timer timer = new Timer();
 MyTimerTask timert = new MyTimerTask();
@@ -88,10 +88,16 @@ void setup() { // Draw the background UI
 }
 
 void draw() {
+  // Fill the background
   background(#212529);
+  fill(0);
+  rect(keySize + keySpacing, 85, keySize * 3 + keySpacing * 2, 80);
+  // Check if timerActive == true
   if (timerActive) {
+    // Display the active timer
     t.setValue(timerString);
   } else {
+    // Display the time.
     t.setValue(date.toString());
   }
   t.draw(this);
@@ -194,14 +200,21 @@ void controlEvent(ControlEvent theEvent) {
     if(optionName == "Cook Options") {
       switch(choice) {
         case 0:
+          timerActive = false;
           println("Normal");
           timerString = "";
           timerValue = 0;
           break;
         case 1:
           println("Defrost chosen");
+          timerActive = true;
           timerString = "";
-          timerValue += 600;
+          timerValue = 600;
+          break;
+        case 2:
+          timerActive = true;
+          println("Popcorn chosen");
+          timerValue = 120;
       }
       timerValue = Integer.parseInt(timerString);
     }
@@ -261,6 +274,7 @@ void createKeypad() {
   cp5.addButton("Stop")
     .setColorValue(color(255))
     .setColorActive(color(155))
+    .setColorLabel(#6c757d)
     .setColorForeground(color(155))
     .setColorBackground(color(#FFA7AF))
     .setPosition(offsetX - keyCenter * 2, offsetY)
@@ -270,6 +284,7 @@ void createKeypad() {
     .setLabel("Start/+30s")
     .setColorValue(color(255))
     .setColorActive(color(155))
+    .setColorLabel(#6c757d)
     .setColorForeground(color(155))
     .setColorBackground(color(#ABFFA7))
     .setPosition(offsetX * 3, offsetY)
